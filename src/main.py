@@ -4,7 +4,7 @@ from discord_bot.discord_agent import create_discord_agent
 from notion.agent import create_agent as create_notion_agent, NotionContext
 from orchestrator import create_orchestrator, OrchestratorContext
 from agents import Runner, trace
-from discord_bot.disord_tools import DiscordContext, fetch_messages, list_text_channels, list_threads_in_channel, fetch_thread_messages, search_messages_in_guild, search_messages_in_channel
+from discord_bot.disord_tools import DiscordContext
 from notion_client import AsyncClient
 
 async def init_notion_client(token: str) -> AsyncClient:

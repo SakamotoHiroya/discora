@@ -1,12 +1,8 @@
-import asyncio
 from agents import Agent, function_tool, RunContextWrapper
 from dataclasses import dataclass
-from discord_bot.discord_agent import create_discord_agent
-from notion.agent import create_agent as create_notion_agent
 from notion.agent import NotionContext
 from discord_bot.disord_tools import DiscordContext
 from agents import Runner
-from typing import Optional
 
 @dataclass
 class OrchestratorContext:
@@ -22,7 +18,7 @@ class OrchestratorContext:
         self.discord_context = discord_context
 
 @function_tool
-async def instract_notion_agent(context: RunContextWrapper[DiscordContext], message: str):
+async def instract_notion_agent(context: RunContextWrapper[OrchestratorContext], message: str):
     """
     Notionページの作成を行うエージェントに指示を出します。
     messageに指定された指示をエージェントに渡します
@@ -35,7 +31,7 @@ async def instract_notion_agent(context: RunContextWrapper[DiscordContext], mess
     return result.final_output
 
 @function_tool
-async def instract_discord_agent(context: RunContextWrapper[DiscordContext], message: str):
+async def instract_discord_agent(context: RunContextWrapper[OrchestratorContext], message: str):
     """
     Discordの情報にアクセスするエージェントに指示を出します。
     messageに指定された指示をエージェントに渡します
@@ -46,7 +42,7 @@ async def instract_discord_agent(context: RunContextWrapper[DiscordContext], mes
         context=context.context.discord_context)
     return result.final_output
 
-def create_orchestrator():
+def create_orchestrator() -> Agent[OrchestratorContext]:
     return Agent(
         name="Orchestrator",
         instructions="あなたはNotionページの作成を行うエージェントとDiscordの情報にアクセスするエージェントを用いながら、ユーザの要望に応えるエージェントです",

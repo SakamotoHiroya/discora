@@ -27,6 +27,7 @@ async def fetch_messages(context: RunContextWrapper[DiscordContext], channel_id:
     Returns:
         list[str]: メッセージ内容のリスト
     """
+    print(quantity)
     channel = context.context.client.get_channel(channel_id)
     if channel is None:
         print("チャンネルが見つかりません。")
