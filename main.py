@@ -2,7 +2,7 @@ import discord
 import config
 from discord_agent import create_discord_agent
 from agents import Runner, trace
-
+from disord_tools import DiscordContext, fetch_messages, list_text_channels, list_threads_in_channel
 intents = discord.Intents.all()
 client = discord.Client(intents=intents)
 
@@ -24,7 +24,8 @@ async def on_message(message):
         agent = await create_discord_agent(client, guild_id)
 
         result = await Runner.run(
-            starting_agent=agent, input=message.content
+            starting_agent=agent, input=message.content,
+            context=DiscordContext(client=client, guild_id=guild_id)
         )
         await message.channel.send(result.final_output)
 
