@@ -1,23 +1,19 @@
+import sys
+import os
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
 from agents import Runner
 from agent import NotionContext
 from client import init_notion_client
 import asyncio
-import os
 from agent import create_agent
+from src import config
 
 async def main(user_request: str):
-    notion_token = os.getenv("NOTION_TOKEN")
-    if not notion_token:
-        raise ValueError("NOTION_TOKEN environment variable must be set.")
-    database_id = os.getenv("NOTION_DATABASE_ID")
-    if not database_id:
-        raise ValueError("NOTION_DATABASE_ID environment variable must be set.")
-    
-    notion_client = init_notion_client(notion_token)
+    notion_client = init_notion_client(config.config.notion_token)
 
     context = NotionContext(
         client=notion_client,
-        database_id=database_id
+        database_id=config.config.notion_database_id,
     )
 
     agent = create_agent()
