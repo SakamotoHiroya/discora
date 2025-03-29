@@ -1,6 +1,6 @@
-from notion_client import Client
+from notion_client import AsyncClient
 
-def init_notion_client(token: str) -> Client:
+async def init_notion_client(token: str) -> AsyncClient:
     """
     Initialize a Notion client with the provided token.
 
@@ -8,7 +8,7 @@ def init_notion_client(token: str) -> Client:
         token (str): The authentication token for Notion API.
 
     Returns:
-        Client: An instance of the Notion Client.
+        AsyncClient: An instance of the Notion AsyncClient.
 
     Raises:
         ValueError: If the token is invalid or authentication fails.
@@ -16,6 +16,6 @@ def init_notion_client(token: str) -> Client:
     if not token:
         raise ValueError("Token must be provided.")
     try:
-        return Client(auth=token)
+        return AsyncClient(auth=token)
     except Exception as e:
         raise ValueError(f"Failed to initialize Notion client: {e}")

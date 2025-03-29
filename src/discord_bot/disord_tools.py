@@ -1,5 +1,7 @@
 from dataclasses import dataclass
 import discord
+print("Discord module:", discord)
+print("Discord Client:", discord.Client)
 from agents import RunContextWrapper, function_tool
 
 @dataclass

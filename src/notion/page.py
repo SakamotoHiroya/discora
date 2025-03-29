@@ -50,6 +50,9 @@ def create_notion_page(
     Raises:
         ValueError: If the request fails or mandatory fields are missing.
     """
+    print(title)
+    print(content_blocks)
+
     if not database_id:
         raise ValueError("Database ID must be provided.")
     if not title:
@@ -75,8 +78,9 @@ def create_notion_page(
     if cover_url:
         new_page_data["cover"] = {"type": "external", "external": {"url": cover_url}}
 
+    
     new_page = client.pages.create(**new_page_data)
-
+    
     return new_page
 
 def delete_notion_page(client: Client, page_id: str) -> dict:

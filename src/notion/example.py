@@ -1,9 +1,9 @@
-from agents import Runner
+import os
+import asyncio
 from agent import NotionContext
 from client import init_notion_client
-import asyncio
-import os
 from agent import create_agent
+from agents import Runner
 
 async def main(user_request: str):
     notion_token = os.getenv("NOTION_TOKEN")
@@ -13,7 +13,7 @@ async def main(user_request: str):
     if not database_id:
         raise ValueError("NOTION_DATABASE_ID environment variable must be set.")
     
-    notion_client = init_notion_client(notion_token)
+    notion_client = await init_notion_client(notion_token)
 
     context = NotionContext(
         client=notion_client,
@@ -22,7 +22,11 @@ async def main(user_request: str):
 
     agent = create_agent()
 
-    await Runner.run(agent, user_request, context=context)
+    await Runner.run(
+        starting_agent=agent,
+        input=user_request,
+        context=context
+    )
 
 if __name__ == "__main__":
     user_request = (
