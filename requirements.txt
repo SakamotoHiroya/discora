@@ -10,3 +10,13 @@ multidict==6.2.0
 propcache==0.3.1
 typing_extensions==4.13.0
 yarl==1.18.3
+
+# 本番環境の依存関係
+openai>=1.0.0
+notion-client>=2.0.0
+requests>=2.25.0
+python-dotenv>=0.19.0
+
+# テスト環境の依存関係
+pytest>=7.0.0
+pytest-cov>=4.0.0
