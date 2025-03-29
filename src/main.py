@@ -7,7 +7,7 @@ from agents import Runner, trace
 from discord_bot.disord_tools import DiscordContext, fetch_messages, list_text_channels, list_threads_in_channel, fetch_thread_messages, search_messages_in_guild, search_messages_in_channel
 from notion_client import AsyncClient
 
-def init_notion_client(token: str) -> AsyncClient:
+async def init_notion_client(token: str) -> AsyncClient:
     return AsyncClient(auth=token)
 
 intents = discord.Intents.all()
@@ -32,7 +32,7 @@ async def on_message(message):
         discord_agent = create_discord_agent()
         orchestrator = create_orchestrator()
 
-        notion_client = init_notion_client(config.NOTION_TOKEN)
+        notion_client = await init_notion_client(config.NOTION_TOKEN)
         notion_context = NotionContext(client=notion_client, database_id=config.NOTION_DATABASE_ID)
         discord_context = DiscordContext(client=client, guild_id=guild_id)
 
@@ -47,7 +47,6 @@ async def on_message(message):
             starting_agent=orchestrator, input=message.content,
             context=orchestrator_context
         )
-        print('aaaaa!!!!!!!!')
         await message.channel.send(result.final_output)
 
 # Bot起動
