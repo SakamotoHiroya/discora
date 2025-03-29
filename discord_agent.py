@@ -1,7 +1,7 @@
 import asyncio
 import discord
 from agents import Agent
-from disord_tools import DiscordContext, fetch_messages, list_text_channels, list_threads_in_channel
+from disord_tools import DiscordContext, fetch_messages, list_text_channels, list_threads_in_channel, fetch_thread_messages, search_messages_in_guild, search_messages_in_channel
 
 async def create_discord_agent(client: discord.Client, guild_id: int):
     agent = Agent(
@@ -10,7 +10,10 @@ async def create_discord_agent(client: discord.Client, guild_id: int):
         tools=[
             fetch_messages,
             list_text_channels,
-            list_threads_in_channel
+            list_threads_in_channel,
+            fetch_thread_messages,
+            search_messages_in_guild,
+            search_messages_in_channel,
         ]
     )
     
