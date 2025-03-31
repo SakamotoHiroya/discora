@@ -17,7 +17,7 @@ async def main(user_request: str):
 
     context = NotionContext(
         client=notion_client,
-        database_id=database_id
+        database_id=config.config.notion_database_id,
     )
 
     agent = create_agent()
