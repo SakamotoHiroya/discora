@@ -1,8 +1,8 @@
 import os
 import unittest
 from notion_client import Client
-from .page import get_notion_pages, create_notion_page, delete_notion_page
-from .client import init_notion_client
+from ...service.notion.page import get_notion_pages, create_notion_page, delete_notion_page
+from ...service.notion.client import init_notion_client
 
 class TestNotionPages(unittest.TestCase):
     def setUp(self):

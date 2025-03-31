@@ -2,12 +2,12 @@ import discord
 import logging
 import asyncio
 from typing import Optional
-from config import config
-from discord_bot.discord_agent import create_discord_agent
-from notion.agent import create_agent as create_notion_agent, NotionContext
-from orchestrator import create_orchestrator, OrchestratorContext
-from agents import Runner, trace
-from discord_bot.disord_tools import DiscordContext
+from discora.core.config import config
+from discora.agents.discord.agent import create_agent as create_discord_agent
+from discora.agents.notion.agent import create_agent as create_notion_agent, NotionContext
+from discora.agents.orchestrator import create_agent as create_orchestrator, OrchestratorContext
+from agents import Runner
+from discora.agents.discord.context import DiscordContext
 from notion_client import AsyncClient
 
 # ログ設定

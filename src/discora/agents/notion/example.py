@@ -1,10 +1,10 @@
 import os
 import asyncio
-from agent import NotionContext
-from client import init_notion_client
-from agent import create_agent
+from discora.agents.notion.context import NotionContext
+from src.discora.service.notion.client import init_notion_client
+from discora.agents.notion.agent import create_agent
 from agents import Runner
-
+from core.config import config
 async def main(user_request: str):
     notion_token = os.getenv("NOTION_TOKEN")
     if not notion_token:
@@ -17,7 +17,7 @@ async def main(user_request: str):
 
     context = NotionContext(
         client=notion_client,
-        database_id=config.config.notion_database_id,
+        database_id=config.NOTION_DATABASE_ID,
     )
 
     agent = create_agent()
