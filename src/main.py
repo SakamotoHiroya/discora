@@ -1,14 +1,55 @@
 import discord
-import config
-from discord.discord_agent import create_discord_agent
+import logging
+import asyncio
+from typing import Optional
+from config import config
+from discord_bot.discord_agent import create_discord_agent
+from notion.agent import create_agent as create_notion_agent, NotionContext
+from orchestrator import create_orchestrator, OrchestratorContext
 from agents import Runner, trace
-from discord.disord_tools import DiscordContext, fetch_messages, list_text_channels, list_threads_in_channel, fetch_thread_messages, search_messages_in_guild, search_messages_in_channel
-intents = discord.Intents.all()
-client = discord.Client(intents=intents)
+from discord_bot.disord_tools import DiscordContext
+from notion_client import AsyncClient
+
+# ログ設定
+logging.basicConfig(
+    level=config.LOG_LEVEL,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
+
+class DiscordBot(discord.Client):
+    def __init__(self):
+        intents = discord.Intents.all()
+        super().__init__(intents=intents)
+        self.notion_client: Optional[AsyncClient] = None
+
+    async def setup_hook(self):
+        """初期化処理"""
+        try:
+            self.notion_client = await init_notion_client(config.NOTION_TOKEN)
+            logger.info("Notion client initialized successfully")
+        except Exception as e:
+            logger.error(f"Failed to initialize Notion client: {e}")
+            raise
+
+    async def close(self):
+        """クリーンアップ処理"""
+        if self.notion_client:
+            await self.notion_client.aclose()
+        await super().close()
+
+async def init_notion_client(token: str) -> AsyncClient:
+    return AsyncClient(auth=token)
+
+client = DiscordBot()
 
 @client.event
 async def on_ready():
-    print(f"✅ ログイン完了: {client.user}")
+    logger.info(f"Logged in as {client.user}")
+
+@client.event
+async def on_error(event, *args, **kwargs):
+    logger.error(f"Error in {event}: {args} {kwargs}")
 
 @client.event
 async def on_message(message):
@@ -20,14 +61,40 @@ async def on_message(message):
         return
 
     if client.user in message.mentions:
-        guild_id = message.guild.id
-        agent = await create_discord_agent(client, guild_id)
+        try:
+            guild_id = message.guild.id
+            notion_agent = create_notion_agent()
+            discord_agent = create_discord_agent()
+            orchestrator = create_orchestrator()
 
-        result = await Runner.run(
-            starting_agent=agent, input=message.content,
-            context=DiscordContext(client=client, guild_id=guild_id)
-        )
-        await message.channel.send(result.final_output)
+            notion_context = NotionContext(client=client.notion_client, database_id=config.NOTION_DATABASE_ID)
+            discord_context = DiscordContext(client=client, guild_id=guild_id)
 
-# Bot起動
-client.run(config.DISCORD_TOKEN)
+            orchestrator_context = OrchestratorContext(
+                notion_agent=notion_agent,
+                discord_agent=discord_agent,
+                notion_context=notion_context,
+                discord_context=discord_context
+            )
+
+            async with message.channel.typing():
+                result = await Runner.run(
+                    starting_agent=orchestrator,
+                    input=message.content,
+                    context=orchestrator_context
+                )
+                await message.channel.send(result.final_output)
+
+        except Exception as e:
+            logger.error(f"Error processing message: {e}")
+            await message.channel.send("申し訳ありません。エラーが発生しました。しばらく時間をおいて再度お試しください。")
+
+def main():
+    try:
+        client.run(config.DISCORD_TOKEN)
+    except Exception as e:
+        logger.critical(f"Failed to start bot: {e}")
+        raise
+
+if __name__ == "__main__":
+    main()

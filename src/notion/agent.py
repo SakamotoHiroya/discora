@@ -1,23 +1,28 @@
-from notion_client import Client
+import asyncio
+from notion_client import AsyncClient
 from agents import Agent, function_tool, RunContextWrapper
 from dataclasses import dataclass
 from typing import Optional, List
-from page import create_notion_page
+from notion.page import create_notion_page
 
 @dataclass
 class NotionContext:
-    client : Client
+    client : AsyncClient
     database_id: str
 
+    def __init__(self, client: AsyncClient, database_id: str):
+        self.client = client
+        self.database_id = database_id
+
 @function_tool(strict_mode=False)
-def create_notion_page_tool(
+async def create_notion_page_tool(
     context: RunContextWrapper[NotionContext],
     title: str,
     content_blocks: Optional[List[dict]] = None,
     icon_url: str = "",
     cover_url: str = ""
 ) -> dict:
-    return create_notion_page(context.context.client,context.context.database_id,title,content_blocks=content_blocks, icon_url=icon_url, cover_url=cover_url)
+    return await create_notion_page(context.context.client,context.context.database_id,title,content_blocks=content_blocks, icon_url=icon_url, cover_url=cover_url)
 
 def create_agent() -> Agent[NotionContext]:
     return Agent(

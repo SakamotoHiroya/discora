@@ -1,18 +1,34 @@
+from dataclasses import dataclass
+from typing import Optional
 import os
+from dotenv import load_dotenv
 
+load_dotenv()
+
+@dataclass
 class Config:
-    def __init__(self):
-        self.discord_token = os.getenv('DISCORD_TOKEN')
-        self.openai_api_key = os.getenv('OPENAI_API_KEY')
-        self.notion_token = os.getenv('NOTION_TOKEN')
-        self.notion_database_id = os.getenv('NOTION_DATABASE_ID')
-        if not self.discord_token:
-            raise ValueError("DISCORD_TOKEN environment variable must be set.")
-        if not self.openai_api_key:
-            raise ValueError("OPENAI_API_KEY environment variable must be set.")
-        if not self.notion_token:
-            raise ValueError("NOTION_TOKEN environment variable must be set.")
-        if not self.notion_database_id:
-            raise ValueError("NOTION_DATABASE_ID environment variable must be set.")
+    DISCORD_TOKEN: str
+    NOTION_TOKEN: str
+    NOTION_DATABASE_ID: str
+    LOG_LEVEL: str = "INFO"
+
+    @classmethod
+    def from_env(cls) -> 'Config':
+        required_vars = {
+            'DISCORD_TOKEN': os.getenv('DISCORD_TOKEN'),
+            'NOTION_TOKEN': os.getenv('NOTION_TOKEN'),
+            'NOTION_DATABASE_ID': os.getenv('NOTION_DATABASE_ID'),
+        }
         
-config = Config()
+        missing_vars = [var for var, value in required_vars.items() if not value]
+        if missing_vars:
+            raise ValueError(f"Missing required environment variables: {', '.join(missing_vars)}")
+        
+        return cls(
+            DISCORD_TOKEN=required_vars['DISCORD_TOKEN'],
+            NOTION_TOKEN=required_vars['NOTION_TOKEN'],
+            NOTION_DATABASE_ID=required_vars['NOTION_DATABASE_ID'],
+            LOG_LEVEL=os.getenv('LOG_LEVEL', 'INFO')
+        )
+
+config = Config.from_env()

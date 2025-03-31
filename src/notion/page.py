@@ -1,11 +1,11 @@
-from notion_client import Client
+from notion_client import AsyncClient
 
-def get_notion_pages(client: Client, database_id: str, page_size: int) -> dict:
+async def get_notion_pages(client: AsyncClient, database_id: str, page_size: int) -> dict:
     """
     Retrieve pages from a Notion database.
 
     Args:
-        client (Client): The Notion client instance.
+        client (AsyncClient): The Notion client instance.
         database_id (str): The ID of the Notion database.
         page_size (int): The number of pages to retrieve.
 
@@ -20,13 +20,13 @@ def get_notion_pages(client: Client, database_id: str, page_size: int) -> dict:
     if page_size <= 0:
         raise ValueError("Page size must be greater than zero.")
     try:
-        response = client.databases.query(database_id=database_id, page_size=page_size)
+        response = await client.databases.query(database_id=database_id, page_size=page_size)
     except Exception as e:
         raise ValueError(f"Failed to retrieve pages: {e}")
     return response
 
-def create_notion_page(
-    client: Client,
+async def create_notion_page(
+    client: AsyncClient,
     database_id: str,
     title: str,
     content_blocks: list = None,
@@ -37,7 +37,7 @@ def create_notion_page(
     Create a new page in a Notion database with structured content, icon, and cover image.
 
     Args:
-        client (Client): The Notion client instance.
+        client (AsyncClient): The Notion client instance.
         database_id (str): The ID of the Notion database.
         title (str): The title of the new page.
         content_blocks (list, optional): List of Notion block dictionaries for structured content. Defaults to None.
@@ -50,6 +50,7 @@ def create_notion_page(
     Raises:
         ValueError: If the request fails or mandatory fields are missing.
     """
+
     if not database_id:
         raise ValueError("Database ID must be provided.")
     if not title:
@@ -75,15 +76,15 @@ def create_notion_page(
     if cover_url:
         new_page_data["cover"] = {"type": "external", "external": {"url": cover_url}}
 
-    new_page = client.pages.create(**new_page_data)
-
+    new_page = await client.pages.create(**new_page_data)
+    
     return new_page
 
-def delete_notion_page(client: Client, page_id: str) -> dict:
+async def delete_notion_page(client: AsyncClient, page_id: str) -> dict:
     if not page_id:
         raise ValueError("Page ID must be provided.")
     try:
-        deleted_page = client.pages.update(page_id=page_id, archived=True)
+        deleted_page = await client.pages.update(page_id=page_id, archived=True)
     except Exception as e:
         raise ValueError(f"Failed to delete page: {e}")
     return deleted_page

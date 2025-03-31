@@ -1,5 +1,7 @@
 from dataclasses import dataclass
 import discord
+print("Discord module:", discord)
+print("Discord Client:", discord.Client)
 from agents import RunContextWrapper, function_tool
 
 @dataclass
@@ -25,6 +27,7 @@ async def fetch_messages(context: RunContextWrapper[DiscordContext], channel_id:
     Returns:
         list[str]: メッセージ内容のリスト
     """
+    print(quantity)
     channel = context.context.client.get_channel(channel_id)
     if channel is None:
         print("チャンネルが見つかりません。")
