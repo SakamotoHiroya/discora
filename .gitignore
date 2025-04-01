@@ -173,9 +173,6 @@ cython_debug/
 # PyPI configuration file
 .pypirc
 
-# Python仮想環境
-notion_env/
-
 # カバレッジレポート
 .coverage
 htmlcov/
