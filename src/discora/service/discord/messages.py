@@ -13,9 +13,11 @@ async def fetch_channel_messages(client: discord.Client, channel_id: int, from_i
     Returns:
         list[str]: メッセージ内容のリスト
     """
+    #TODO: quantiyのログをどうするかprintはあまり好ましくないと思う。
     print(quantity)
     channel = client.get_channel(channel_id)
     if channel is None:
+        #TODO: printは必要か、ログの管理をどうするか
         print("チャンネルが見つかりません。")
         return []
 
@@ -45,6 +47,7 @@ async def fetch_thread_messages(client: discord.Client, thread_id: int, from_ind
     """
     thread = client.get_channel(thread_id)
     if thread is None or not isinstance(thread, discord.Thread):
+        #TODO: printは必要か、ログの管理をどうするか
         print("スレッドが見つかりません。")
         return []
 
@@ -74,6 +77,7 @@ async def search_messages_in_channel(client: discord.Client, channel_id: int, ke
     """
     channel = client.get_channel(channel_id)
     if channel is None or not isinstance(channel, discord.TextChannel):
+        #TODO: printは必要か、ログの管理をどうするか
         print("チャンネルが見つからないか、TextChannelではありません。")
         return []
 
@@ -86,6 +90,7 @@ async def search_messages_in_channel(client: discord.Client, channel_id: int, ke
                 if len(results) >= limit:
                     break
     except discord.Forbidden:
+        #TODO: printは必要か、ログの管理をどうするか
         print("チャンネルへのアクセス権限がありません。")
 
     return results
