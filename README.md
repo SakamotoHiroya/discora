@@ -31,10 +31,34 @@ git clone <repository-url>
 cd discora
 ```
 
-2. 依存関係のインストール
-```bash
-pip install -r requirements.txt
-```
+2. 仮想環境のセットアップと依存関係のインストール
+
+   **Poetry を使用する場合（推奨）:**
+   ```bash
+   # Poetryがインストールされていない場合はインストール
+   # curl -sSL https://install.python-poetry.org | python3 -
+
+   # 依存関係のインストール
+   poetry install
+
+   # 仮想環境を有効化
+   poetry shell
+   ```
+
+   **venv を使用する場合:**
+   ```bash
+   # 仮想環境を作成
+   python -m venv .venv
+
+   # 仮想環境を有効化
+   # Linux/macOS
+   source .venv/bin/activate
+   # Windows
+   .venv\Scripts\activate
+
+   # 依存関係のインストール
+   pip install -r requirements.txt
+   ```
 
 3. 環境変数の設定
    - `.env`ファイルを作成して、必要なAPIキーを設定
@@ -43,6 +67,12 @@ pip install -r requirements.txt
    NOTION_TOKEN=your_notion_api_key
    NOTION_DATABASE_ID=your_notion_database_id
    LOG_LEVEL=INFO
+   ```
+
+   **direnv を使用する場合（オプション）:**
+   - `.envrc`ファイルが既に存在するため、direnvがインストールされている場合は以下のコマンドで有効化できます
+   ```bash
+   direnv allow
    ```
 
 ### Discord APIの設定
@@ -62,6 +92,7 @@ pip install -r requirements.txt
 ### Discordボットの起動
 
 ```bash
+# 仮想環境が有効化されていることを確認してから実行
 python -m src.discora.core.main
 ```
 
@@ -181,6 +212,8 @@ if __name__ == "__main__":
 discora/
 ├── .env.sample          # 環境変数サンプルファイル
 ├── requirements.txt     # 依存関係リスト
+├── poetry.lock          # Poetry依存関係ロックファイル
+├── pyproject.toml       # Poetryプロジェクト設定
 ├── README.md            # このファイル
 └── src/                 # ソースコード
     ├── __init__.py
@@ -199,6 +232,7 @@ discora/
 
 ## 注意点
 
+- 仮想環境内でプロジェクトを実行することを強く推奨します
 - Discord APIを使用するには、Discordボットの作成とトークンの取得が必要です
 - Notion APIを使用するには、Notion統合の作成とAPIキーの取得が必要です
 - 統合をそれぞれのプラットフォームに接続し、適切なアクセス権を付与する必要があります
