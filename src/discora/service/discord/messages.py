@@ -1,4 +1,5 @@
 import discord
+from discora.core.main import logger
 
 async def fetch_channel_messages(client: discord.Client, channel_id: int, from_index: int, quantity: int) -> list[str]:
     """
@@ -13,12 +14,10 @@ async def fetch_channel_messages(client: discord.Client, channel_id: int, from_i
     Returns:
         list[str]: メッセージ内容のリスト
     """
-    #TODO: quantiyのログをどうするかprintはあまり好ましくないと思う。
-    print(quantity)
+    logger.info(f"Fetching {quantity} messages")
     channel = client.get_channel(channel_id)
     if channel is None:
-        #TODO: printは必要か、ログの管理をどうするか
-        print("チャンネルが見つかりません。")
+        logger.info("Channel not found.")
         return []
 
     messages = []
@@ -47,8 +46,7 @@ async def fetch_thread_messages(client: discord.Client, thread_id: int, from_ind
     """
     thread = client.get_channel(thread_id)
     if thread is None or not isinstance(thread, discord.Thread):
-        #TODO: printは必要か、ログの管理をどうするか
-        print("スレッドが見つかりません。")
+        logger.info("Thread not found.")
         return []
 
     messages = []
@@ -77,8 +75,7 @@ async def search_messages_in_channel(client: discord.Client, channel_id: int, ke
     """
     channel = client.get_channel(channel_id)
     if channel is None or not isinstance(channel, discord.TextChannel):
-        #TODO: printは必要か、ログの管理をどうするか
-        print("チャンネルが見つからないか、TextChannelではありません。")
+        logger.info("Channel not found or not a TextChannel.")
         return []
 
     results = []
@@ -90,8 +87,7 @@ async def search_messages_in_channel(client: discord.Client, channel_id: int, ke
                 if len(results) >= limit:
                     break
     except discord.Forbidden:
-        #TODO: printは必要か、ログの管理をどうするか
-        print("チャンネルへのアクセス権限がありません。")
+        logger.info("No permission to access the channel.")
 
     return results
 
