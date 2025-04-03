@@ -1,6 +1,6 @@
 from agents import Agent
 import discora.agents.discord.tools as tools
-from discora.agents import DiscordContext
+from discora.agents.discord import DiscordContext
 
 def create_agent() -> Agent[DiscordContext]:
     agent = Agent[DiscordContext](
