@@ -1,5 +1,7 @@
 import discord
-from discora.core.main import logger
+import logging
+
+logger = logging.getLogger(__name__)
 
 async def fetch_channel_messages(client: discord.Client, channel_id: int, from_index: int, quantity: int) -> list[str]:
     """
