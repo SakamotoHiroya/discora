@@ -81,6 +81,19 @@ async def create_notion_page(
     return new_page
 
 async def delete_notion_page(client: AsyncClient, page_id: str) -> dict:
+    """
+    Archives (deletes) a Notion page using the provided AsyncClient.
+
+    Args:
+        client (AsyncClient): The Notion client instance used to send the request.
+        page_id (str): The ID of the Notion page to be archived (deleted).
+
+    Returns:
+        dict: A dictionary representing the archived page object returned by the Notion API.
+
+    Raises:
+        ValueError: If the page_id is not provided or if the deletion fails.
+    """
     if not page_id:
         raise ValueError("Page ID must be provided.")
     try:
