@@ -1,10 +1,12 @@
 # Makefile for Poetry environment management
 
-.PHONY: install shell remove clean info add remove-lib
+.PHONY: setup shell remove clean info add remove-lib
 
-# Install dependencies and create a virtual environment
-install:
+# Install dependencies, create a virtual environment, and setup VSCode
+setup:
 	poetry install
+	chmod +x scripts/setup_vscode.sh
+	./scripts/setup_vscode.sh
 
 # Activate the Poetry shell
 shell:
