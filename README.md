@@ -35,29 +35,9 @@ cd discora
 
    **Poetry を使用する場合（推奨）:**
    ```bash
-   # Poetryがインストールされていない場合はインストール
-   # curl -sSL https://install.python-poetry.org | python3 -
 
    # 依存関係のインストール
    poetry install
-
-   # 仮想環境を有効化
-   poetry shell
-   ```
-
-   **venv を使用する場合:**
-   ```bash
-   # 仮想環境を作成
-   python -m venv .venv
-
-   # 仮想環境を有効化
-   # Linux/macOS
-   source .venv/bin/activate
-   # Windows
-   .venv\Scripts\activate
-
-   # 依存関係のインストール
-   pip install -r requirements.txt
    ```
 
 3. 環境変数の設定
@@ -69,11 +49,12 @@ cd discora
    LOG_LEVEL=INFO
    ```
 
-   **direnv を使用する場合（オプション）:**
-   - `.envrc`ファイルが既に存在するため、direnvがインストールされている場合は以下のコマンドで有効化できます
-   ```bash
-   direnv allow
-   ```
+### 実行
+
+以下のコマンド実行します
+```shell
+poetry run python -m discora.core.main
+```
 
 ### Discord APIの設定
 
