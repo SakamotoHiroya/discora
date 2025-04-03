@@ -10,7 +10,8 @@ requires-python = ">=3.11,<4"
 dependencies = [
     "notion-client (>=2.3.0,<3.0.0)",
     "discord-py (>=2.5.2,<3.0.0)",
-    "openai-agents (>=0.0.7,<0.0.8)"
+    "openai-agents (>=0.0.7,<0.0.8)",
+    "aiohttp (>=3.11.16,<4.0.0)"
 ]
 
 [tool.poetry]
