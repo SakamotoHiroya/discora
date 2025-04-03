@@ -1,19 +1,23 @@
 import os
 import unittest
-from notion_client import Client
-from ...service.notion.page import get_notion_pages, create_notion_page, delete_notion_page
-from ...service.notion.client import init_notion_client
+from notion_client import AsyncClient
+from discora.service.notion.page import get_notion_pages, create_notion_page, delete_notion_page
+from discora.service.notion.client import init_notion_client
+from discora.core.config import config
 
 class TestNotionPages(unittest.TestCase):
     def setUp(self):
-        self.database_id = os.getenv("NOTION_DATABASE_ID")
+        self.database_id = config.NOTION_DATABASE_ID
         if not self.database_id:
             raise ValueError("NOTION_DATABASE_ID environment variable is not set.")
-        self.token = os.getenv("NOTION_TOKEN")
+        
+        self.token = config.NOTION_TOKEN
         if not self.token:
             raise ValueError("NOTION_TOKEN environment variable is not set.")
+        
         self.client = init_notion_client(self.token)
-        if not isinstance(self.client, Client):
+        
+        if not isinstance(self.client, AsyncClient):
             raise ValueError("Failed to initialize Notion client.")
 
     def tearDown(self):
