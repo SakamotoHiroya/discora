@@ -1,6 +1,5 @@
 import discord
 import logging
-import asyncio
 from typing import Optional
 from discora.core.config import config
 from discora.agents.discord import create_agent as create_discord_agent
