@@ -1,7 +1,7 @@
 from agents import function_tool, RunContextWrapper
 from discora.agents.discord.context import DiscordContext
 import discord
-from discora.service.discord.messages import fetch_channel_messages, fetch_thread_messages, search_messages_in_channel, search_messages_in_guild
+import discora.service.discord.messages as messages
 
 @function_tool
 async def fetch_channel_messages(context: RunContextWrapper[DiscordContext], channel_id: int, from_index: int, quantity: int) -> list[str]:
@@ -16,7 +16,7 @@ async def fetch_channel_messages(context: RunContextWrapper[DiscordContext], cha
     Returns:
         list[str]: メッセージ内容のリスト
     """
-    return fetch_channel_messages(context.context.client, channel_id, from_index, quantity)
+    return await messages.fetch_channel_messages(context.context.client, channel_id, from_index, quantity)
 
 @function_tool
 async def fetch_thread_messages(context: RunContextWrapper[DiscordContext], thread_id: int, from_index: int, quantity: int) -> list[str]:
@@ -31,7 +31,7 @@ async def fetch_thread_messages(context: RunContextWrapper[DiscordContext], thre
     Returns:
         list[str]: メッセージ内容のリスト
     """
-    return fetch_thread_messages(context.context.client, thread_id, from_index, quantity)
+    return await messages.fetch_thread_messages(context.context.client, thread_id, from_index, quantity)
 
 @function_tool
 async def search_messages_in_channel(context: RunContextWrapper[DiscordContext], channel_id: int, keyword: str, limit: int) -> list[tuple[int, str]]:
@@ -46,7 +46,7 @@ async def search_messages_in_channel(context: RunContextWrapper[DiscordContext],
     Returns:
         list[tuple[int, str]]: (スレッドID, メッセージ内容) のリスト
     """
-    return search_messages_in_channel(context.context.client, channel_id, keyword, limit)
+    return await messages.search_messages_in_channel(context.context.client, channel_id, keyword, limit)
 
 @function_tool
 async def search_messages_in_guild(context: RunContextWrapper[DiscordContext], keyword: str, limit: int) -> list[tuple[int, int, str]]:
@@ -60,4 +60,4 @@ async def search_messages_in_guild(context: RunContextWrapper[DiscordContext], k
     Returns:
         list[tuple[int, int, str]]: (チャンネルID, スレッドID, メッセージ内容) のリスト
     """
-    return search_messages_in_guild(context.context.client, keyword, limit)
+    return await messages.search_messages_in_guild(context.context.client, keyword, limit)

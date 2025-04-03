@@ -1,6 +1,6 @@
 from agents import function_tool, RunContextWrapper
 from discora.agents.discord.context import DiscordContext
-from discora.service.discord.threads import list_threads_in_channel
+import discora.service.discord.threads as threads
 import discord
 
 @function_tool
@@ -14,5 +14,5 @@ async def list_threads_in_channel(context: RunContextWrapper[DiscordContext], ch
     Returns:
         list[discord.Thread]: スレッドのリスト
     """
-    return list_threads_in_channel(context.context.client, channel_id)
+    return threads.list_threads_in_channel(context.context.client, channel_id)
 
