@@ -16,7 +16,7 @@ def create_agent() -> Agent[OrchestratorContext]:
     Returns:
         Agent: オーケストレーターエージェント
     """
-    return Agent(
+    return Agent[OrchestratorContext](
         name="Orchestrator",
         instructions="あなたはNotionページの作成を行うエージェントとDiscordの情報にアクセスするエージェントを用いながら、ユーザの要望に応えるエージェントです",
         tools=[instract_notion_agent, instract_discord_agent]

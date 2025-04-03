@@ -3,7 +3,7 @@ from discora.agents.notion.context import NotionContext
 from discora.agents.notion.tools.page import create_notion_page, delete_notion_page, get_notion_pages
 
 def create_agent() -> Agent[NotionContext]:
-    return Agent(
+    return Agent[NotionContext](
         name="Notion Page Creator",
         instructions=(
             "Create new pages in Notion based on user requests. "
