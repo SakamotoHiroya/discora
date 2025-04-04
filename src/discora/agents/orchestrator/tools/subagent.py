@@ -1,32 +1,8 @@
-import asyncio
+from agents import function_tool, RunContextWrapper, Runner
+from discora.agents.orchestrator.context import OrchestratorContext
 import logging
-from typing import Optional, Dict, Any
-from agents import Agent, function_tool, RunContextWrapper
-from dataclasses import dataclass
-from notion.agent import NotionContext
-from discord_bot.disord_tools import DiscordContext
-from agents import Runner
 
 logger = logging.getLogger(__name__)
-
-@dataclass
-class OrchestratorContext:
-    notion_agent: Agent
-    discord_agent: Agent
-    notion_context: NotionContext
-    discord_context: DiscordContext
-
-    def __init__(
-        self,
-        notion_agent: Agent,
-        discord_agent: Agent,
-        notion_context: NotionContext,
-        discord_context: DiscordContext
-    ) -> None:
-        self.notion_agent = notion_agent
-        self.discord_agent = discord_agent
-        self.notion_context = notion_context
-        self.discord_context = discord_context
 
 @function_tool
 async def instract_notion_agent(context: RunContextWrapper[OrchestratorContext], message: str):
@@ -83,16 +59,3 @@ async def instract_discord_agent(context: RunContextWrapper[OrchestratorContext]
     except Exception as e:
         logger.error(f"Error in Discord agent: {e}")
         raise
-
-def create_orchestrator() -> Agent[OrchestratorContext]:
-    """
-    オーケストレーターエージェントを作成します。
-
-    Returns:
-        Agent: オーケストレーターエージェント
-    """
-    return Agent(
-        name="Orchestrator",
-        instructions="あなたはNotionページの作成を行うエージェントとDiscordの情報にアクセスするエージェントを用いながら、ユーザの要望に応えるエージェントです",
-        tools=[instract_notion_agent, instract_discord_agent]
-    )

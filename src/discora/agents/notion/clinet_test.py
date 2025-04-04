@@ -1,7 +1,7 @@
 import os
 import unittest
 from notion_client import Client
-from client import init_notion_client
+from src.discora.service.notion.client import init_notion_client
 
 class TestInitNotionClient(unittest.TestCase):
     def setUp(self):
